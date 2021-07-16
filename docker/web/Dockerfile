@@ -12,6 +12,7 @@ ARG WWWGROUP
 ARG WWWUSER
 RUN groupadd --force -g $WWWGROUP indra
 RUN useradd -ms /bin/bash --no-user-group -g $WWWGROUP -u 1337 indra
+RUN usermod -a -G root indra && usermod -a -G www-data indra
 
 COPY ./msmtp/  /tmp/
 #
@@ -26,8 +27,6 @@ RUN bash /tmp/build.sh
 #
 COPY ${PHP_VERSION}/php/php.ini /etc/php/8.0/cli/conf.d/99-indra.ini
 COPY apache /etc/apache2/
-
-COPY scripts/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 
 RUN update-ca-certificates
 RUN setcap "cap_net_bind_service=+ep" /usr/bin/php${PHP_VERSION}

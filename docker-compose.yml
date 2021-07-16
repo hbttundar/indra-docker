@@ -5,13 +5,11 @@ services:
   web:
     build:
       context: ./docker/web
-      dockerfile: Dockerfile
       args:
         WWWGROUP: "${WWWGROUP}"
         WWWUSER: "${WWWUSER}"
         PHP_VERSION: "${PHP_VERSION}"
         INSTALL_XDEBUG: "${INSTALL_XDEBUG}"
-    image: indra/app
     environment:
       LARAVEL_INDRA: 1
     networks:
@@ -27,9 +25,9 @@ services:
       - meilisearch
       - selenium
     links:
-      - proxy:www.indra.de.localhost
-      - proxy:www.indra.de
       - proxy:www.stage.indra.de
+      - proxy:www.live.indra.de
+      - proxy:www.indra.de
     container_name: ${WEB_CONTAINER_NAME}
   ### playground #######################################################################################################
   playground:
@@ -83,6 +81,7 @@ services:
     volumes:
       - "./:/var/www/html/"
     command: [ "install", "--ignore-platform-reqs" ]
+    user: ${WWWUSER}
     networks:
       - indra
     container_name: ${COMPOSER_CONTAINER_NAME}
