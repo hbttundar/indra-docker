@@ -27,9 +27,9 @@ services:
       - meilisearch
       - selenium
     links:
-      - proxy:www.secretaria.es.localhost
-      - proxy:www.secretaria.es
-      - proxy:www.stage.secretaria.es
+      - proxy:www.indra.de.localhost
+      - proxy:www.indra.de
+      - proxy:www.stage.indra.de
     container_name: ${WEB_CONTAINER_NAME}
   ### playground #######################################################################################################
   playground:
