@@ -47,6 +47,35 @@ if [[ ! -f ${ARTISAN} ]]; then
   sudo chmod +x artisan
   sudo ln -s "${CURRENT_DIR}/artisan" /usr/bin/artisan
 fi
+#stop local apache mysql and nginx
+NGINXRUNNING=$(systemctl is-active nginx)
+APACHERUNNING=$(systemctl is-active apache2)
+MYSQLRUNNING=$(systemctl is-active mysql)
+if [ $APACHERUNNING = "active" ]
+then
+echo "Apache is running, stopping it"
+sudo service apache2 stop
+echo "${YELLOW}Stopping Apache2${NC}"
+fi
+if [ $NGINXRUNNING = "active" ]
+then
+echo "nginx is running, stopping it"
+sudo service nginx stop
+echo "${YELLOW}Stopping Nginx${NC}"
+fi
+if [ $MYSQLRUNNING = "active" ]
+then
+echo "MySql is running, stopping it"
+sudo service mysql stop
+echo "${YELLOW}Stopping MySql${NC}"
+fi
+#stop docker and docker compose
+echo "${YELLOW}Stopping Dockers...${NC}"
+docker stop $(docker ps -a -q)
+echo "Docker ${GREEN}Stopped${NC}"
+echo "${YELLOW}Stopping Docker-compose...${NC}"
+docker-compose stop
+echo "Docker-compose ${GREEN}Stopped${NC}"
 
 # Ensure that Docker is running...
 if ! docker info >/dev/null 2>&1; then
