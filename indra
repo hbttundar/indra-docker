@@ -49,24 +49,27 @@ NODE_ROOT=${CURRENT_DIR}/node_modules/
 #  sudo ln -s "${CURRENT_DIR}/artisan" /usr/bin/artisan
 #fi
 #stop local apache mysql and nginx
-NGINXRUNNING=$(systemctl is-active nginx)
-APACHERUNNING=$(systemctl is-active apache2)
-MYSQLRUNNING=$(systemctl is-active mysql)
-if [ $APACHERUNNING = "active" ]; then
-  echo "Apache is running, stopping it"
-  sudo service apache2 stop
-  echo -e "${YELLOW}Stopping Apache2${NC}"
+if [ "$MACHINE" == "linux" ]; then
+  NGINXRUNNING=$(systemctl is-active nginx)
+  APACHERUNNING=$(systemctl is-active apache2)
+  MYSQLRUNNING=$(systemctl is-active mysql)
+  if [ $APACHERUNNING = "active" ]; then
+    echo "Apache is running, stopping it"
+    sudo service apache2 stop
+    echo -e "${YELLOW}Stopping Apache2${NC}"
+  fi
+  if [ $NGINXRUNNING = "active" ]; then
+    echo "nginx is running, stopping it"
+    sudo service nginx stop
+    echo -e "${YELLOW}Stopping Nginx${NC}"
+  fi
+  if [ $MYSQLRUNNING = "active" ]; then
+    echo "MySql is running, stopping it"
+    sudo service mysql stop
+    echo -e "${YELLOW}Stopping MySql${NC}"
+  fi
 fi
-if [ $NGINXRUNNING = "active" ]; then
-  echo "nginx is running, stopping it"
-  sudo service nginx stop
-  echo -e "${YELLOW}Stopping Nginx${NC}"
-fi
-if [ $MYSQLRUNNING = "active" ]; then
-  echo "MySql is running, stopping it"
-  sudo service mysql stop
-  echo -e "${YELLOW}Stopping MySql${NC}"
-fi
+
 # Ensure that Docker is running...
 if ! docker info >/dev/null 2>&1; then
   echo -e "${WHITE}Docker is not running.${NC}" >&2

@@ -88,6 +88,7 @@ services:
   ## mysql service ##########################################################################################################################
   mysql:
     image: "mysql:8.0"
+    platform: linux/x86_64
     ports:
       - "${FORWARD_DB_PORT:-3306}:3306"
     environment:
@@ -160,6 +161,7 @@ services:
   ### mongo ############################################################################################################
   mongo:
     image: mongo:4.2
+    platform: linux/x86_64
     networks:
       - indra
     container_name: ${MONOGO_CONTAINER_NAME}
@@ -183,6 +185,7 @@ services:
           memory: 1g
     networks:
       - indra
+    platform: linux/x86_64  
     container_name: ${ELASTICSEARCH_CONTAINER_NAME}
   ### graylog ############################################################################################################
   graylog:
