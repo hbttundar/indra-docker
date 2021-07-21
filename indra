@@ -141,19 +141,19 @@ if [ $# -gt 0 ]; then
     sudo chmod +x artisan
 
     echo -e "${BLUE} start to set vendor directory permission${NC}"
-    sudo chown -R "${WWWUSER}":"${WWWGROUP}" "${VENDOR_ROOT}" && sudo chmod -R 777 "${VENDOR_ROOT}" || exit
+    sudo chown -R "${WWWUSER}":"${WWWGROUP}" "${VENDOR_ROOT}" && sudo chmod -R 777 "${VENDOR_ROOT}" 
     echo -e "${BLUE} permission set for composer directory ${NC}\r\n"
 
     echo -e "${CYAN} start to set node_modules directory permission${NC}"
-    sudo chown -R "${WWWUSER}":"${WWWGROUP}" "${NODE_ROOT}" && sudo chmod -R 777 "${NODE_ROOT}" || exit
+    sudo chown -R "${WWWUSER}":"${WWWGROUP}" "${NODE_ROOT}" && sudo chmod -R 777 "${NODE_ROOT}"
     echo -e "${GREEN} permission set for node_modules directory ${NC}\r\n"
 
     echo -e "${BLUE} start to set bootstrap directory permission${NC}"
-    sudo chmod 777 -R "${BOOTSTRAP}" || exit
+    sudo chmod -R 777 "${BOOTSTRAP}"
     echo -e "${BLUE} permission set for bootstrap directory ${NC}\r\n"
 
     echo -e "${CYAN} start to set storage directory permission${NC}"
-    sudo chmod 777-R "${STORAGE}" || exit
+    sudo chmod -R 777 "${STORAGE}" 
     echo -e "${GREEN} permission set for node_modules directory ${NC}\r\n"
 
   elif [ "$1" == "help" ] || [ "$1" == "-h" ]; then
