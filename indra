@@ -75,24 +75,24 @@ STORAGE="${CURRENT_DIR}"/storage/
 # 	NGINXRUNNING=$(brew services list | grep nginx| cut -d\   -f2)
 # 	APACHERUNNING=$(brew services list | grep httpd| cut -d\   -f2)
 # 	MYSQLRUNNING=$(brew services list | grep mysql| cut -d\   -f2)
-# 	if [ $NGINXRUNNING=="started" ]; then 
+# 	if [ $NGINXRUNNING=="started" ]; then
 # 		echo "nginx is running, stopping it"
 # 		brew services stop nginx
 # 		echo -e "${YELLOW}Stopping Nginx${NC}"
 # 	fi
-# 	if [ $APACHERUNNING=="started" ]; then 
+# 	if [ $APACHERUNNING=="started" ]; then
 # 		echo "Apache is running, stopping it"
 # 		brew services stop httpd
 # 		echo "${YELLOW}Stopping Apache2${NC}"
 # 	fi
-# 	if [ $MYSQLRUNNING=="started" ]; then 
+# 	if [ $MYSQLRUNNING=="started" ]; then
 # 		echo "MySql is running, stopping it"
 # 		brew services stop mysql
 # 		echo -e "${YELLOW}Stopping MySql${NC}"
 # 	fi
 # fi
 # Ensure that Docker is running...
-docker info >/dev/null 2>&1;
+docker info >/dev/null 2>&1
 if ! docker info >/dev/null 2>&1; then
   echo -e "${WHITE}Docker is not running.${NC}" >&2
 
@@ -130,7 +130,7 @@ if [ $# -gt 0 ]; then
   fi
   if [ "$1" == "initialize" ] || [ "$1" == "-init" ]; then
     shift 1
-    echo -e "${RED} start delete old indra,artisan files from /usr/bin directory ${NC}\r\n"
+    echo -e "${RED} start delete old indra,artisan files from /usr/local/bin directory ${NC}\r\n"
     sudo rm -rf ${INDRA} && sudo rm -rf ${ARTISAN} || exit
 
     sudo ln -s "${CURRENT_DIR}/indra" /usr/local/bin/indra
@@ -141,7 +141,7 @@ if [ $# -gt 0 ]; then
     sudo chmod +x artisan
 
     echo -e "${BLUE} start to set vendor directory permission${NC}"
-    sudo chown -R "${WWWUSER}":"${WWWGROUP}" "${VENDOR_ROOT}" && sudo chmod -R 777 "${VENDOR_ROOT}" 
+    sudo chown -R "${WWWUSER}":"${WWWGROUP}" "${VENDOR_ROOT}" && sudo chmod -R 777 "${VENDOR_ROOT}"
     echo -e "${BLUE} permission set for composer directory ${NC}\r\n"
 
     echo -e "${CYAN} start to set node_modules directory permission${NC}"
@@ -153,7 +153,7 @@ if [ $# -gt 0 ]; then
     echo -e "${BLUE} permission set for bootstrap directory ${NC}\r\n"
 
     echo -e "${CYAN} start to set storage directory permission${NC}"
-    sudo chmod -R 777 "${STORAGE}" 
+    sudo chmod -R 777 "${STORAGE}"
     echo -e "${GREEN} permission set for node_modules directory ${NC}\r\n"
 
   elif [ "$1" == "help" ] || [ "$1" == "-h" ]; then
