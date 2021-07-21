@@ -69,6 +69,26 @@ if [ "$MACHINE" == "linux" ]; then
     echo -e "${YELLOW}Stopping MySql${NC}"
   fi
 fi
+if [ "$MACHINE" == "mac" ]; then
+	NGINXRUNNING=$(brew services list | grep nginx| cut -d\   -f2)
+	APACHERUNNING=$(brew services list | grep httpd| cut -d\   -f2)
+	MYSQLRUNNING=$(brew services list | grep mysql| cut -d\   -f2)
+	if [ $NGINXRUNNING=="started" ]; then 
+		echo "nginx is running, stopping it"
+		sudo  brew services stop nginx
+		echo -e "${YELLOW}Stopping Nginx${NC}"
+	fi
+	if [ $APACHERUNNING=="started" ]; then 
+		echo "Apache is running, stopping it"
+		sudo  brew services stop httpd
+		echo "${YELLOW}Stopping Apache2${NC}"
+	fi
+	if [ $MYSQLRUNNING=="started" ]; then 
+		echo "MySql is running, stopping it"
+		sudo  brew services stop mysql
+		echo -e "${YELLOW}Stopping MySql${NC}"
+	fi
+fi
 # Ensure that Docker is running...
 docker info >/dev/null 2>&1;
 if ! docker info >/dev/null 2>&1; then
