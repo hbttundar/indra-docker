@@ -49,46 +49,46 @@ NODE_ROOT="${CURRENT_DIR}"/node_modules/
 #  sudo ln -s "${CURRENT_DIR}/artisan" /usr/bin/artisan
 #fi
 #stop local apache mysql and nginx
-if [ "$MACHINE" == "linux" ]; then
-  NGINXRUNNING=$(systemctl is-active nginx)
-  APACHERUNNING=$(systemctl is-active apache2)
-  MYSQLRUNNING=$(systemctl is-active mysql)
-  if [ "$APACHERUNNING" = "active" ]; then
-    echo "Apache is running, stopping it"
-    sudo service apache2 stop
-    echo -e "${YELLOW}Stopping Apache2${NC}"
-  fi
-  if [ "$NGINXRUNNING" = "active" ]; then
-    echo "nginx is running, stopping it"
-    sudo service nginx stop
-    echo -e "${YELLOW}Stopping Nginx${NC}"
-  fi
-  if [ "$MYSQLRUNNING" = "active" ]; then
-    echo "MySql is running, stopping it"
-    sudo service mysql stop
-    echo -e "${YELLOW}Stopping MySql${NC}"
-  fi
-fi
-if [ "$MACHINE" == "mac" ]; then
-	NGINXRUNNING=$(brew services list | grep nginx| cut -d\   -f2)
-	APACHERUNNING=$(brew services list | grep httpd| cut -d\   -f2)
-	MYSQLRUNNING=$(brew services list | grep mysql| cut -d\   -f2)
-	if [ $NGINXRUNNING=="started" ]; then 
-		echo "nginx is running, stopping it"
-		brew services stop nginx
-		echo -e "${YELLOW}Stopping Nginx${NC}"
-	fi
-	if [ $APACHERUNNING=="started" ]; then 
-		echo "Apache is running, stopping it"
-		brew services stop httpd
-		echo "${YELLOW}Stopping Apache2${NC}"
-	fi
-	if [ $MYSQLRUNNING=="started" ]; then 
-		echo "MySql is running, stopping it"
-		brew services stop mysql
-		echo -e "${YELLOW}Stopping MySql${NC}"
-	fi
-fi
+# if [ "$MACHINE" == "linux" ]; then
+#   NGINXRUNNING=$(systemctl is-active nginx)
+#   APACHERUNNING=$(systemctl is-active apache2)
+#   MYSQLRUNNING=$(systemctl is-active mysql)
+#   if [ "$APACHERUNNING" = "active" ]; then
+#     echo "Apache is running, stopping it"
+#     sudo service apache2 stop
+#     echo -e "${YELLOW}Stopping Apache2${NC}"
+#   fi
+#   if [ "$NGINXRUNNING" = "active" ]; then
+#     echo "nginx is running, stopping it"
+#     sudo service nginx stop
+#     echo -e "${YELLOW}Stopping Nginx${NC}"
+#   fi
+#   if [ "$MYSQLRUNNING" = "active" ]; then
+#     echo "MySql is running, stopping it"
+#     sudo service mysql stop
+#     echo -e "${YELLOW}Stopping MySql${NC}"
+#   fi
+# fi
+# if [ "$MACHINE" == "mac" ]; then
+# 	NGINXRUNNING=$(brew services list | grep nginx| cut -d\   -f2)
+# 	APACHERUNNING=$(brew services list | grep httpd| cut -d\   -f2)
+# 	MYSQLRUNNING=$(brew services list | grep mysql| cut -d\   -f2)
+# 	if [ $NGINXRUNNING=="started" ]; then 
+# 		echo "nginx is running, stopping it"
+# 		brew services stop nginx
+# 		echo -e "${YELLOW}Stopping Nginx${NC}"
+# 	fi
+# 	if [ $APACHERUNNING=="started" ]; then 
+# 		echo "Apache is running, stopping it"
+# 		brew services stop httpd
+# 		echo "${YELLOW}Stopping Apache2${NC}"
+# 	fi
+# 	if [ $MYSQLRUNNING=="started" ]; then 
+# 		echo "MySql is running, stopping it"
+# 		brew services stop mysql
+# 		echo -e "${YELLOW}Stopping MySql${NC}"
+# 	fi
+# fi
 # Ensure that Docker is running...
 docker info >/dev/null 2>&1;
 if ! docker info >/dev/null 2>&1; then
@@ -131,19 +131,19 @@ if [ $# -gt 0 ]; then
     echo -e "${RED} start delete old indra,artisan files from /usr/bin directory ${NC}\r\n"
     sudo rm -rf ${INDRA} && sudo rm -rf ${ARTISAN} || exit
 
-    sudo ln -s "${CURRENT_DIR}/indra" /usr/bin/indra
+    sudo ln -s "${CURRENT_DIR}/indra" /usr/local/bin/indra
     echo -e "${GREEN} indra add to /usr/bin directory successfully ${NC}"
 
-    sudo ln -s "${CURRENT_DIR}/artisan" /usr/bin/artisan
+    sudo ln -s "${CURRENT_DIR}/artisan" /usr/local/bin/artisan
     echo -e "${GREEN} artisan add to /usr/bin directory successfully ${NC}\r\n"
     sudo chmod +x artisan
 
     echo -e "${BLUE} start to set vendor directory permission${NC}"
-    sudo chown -R "${WWWUSER}":www-data "${VENDOR_ROOT}" && sudo chmod -R 777 "${VENDOR_ROOT}" || exit
+    sudo chown -R "${WWWUSER}":"${WWWGROUP}" "${VENDOR_ROOT}" && sudo chmod -R 777 "${VENDOR_ROOT}" || exit
     echo -e "${BLUE} permission set for composer directory ${NC}\r\n"
 
     echo -e "${CYAN} start to set node_modules directory permission${NC}"
-    sudo chown -R "${WWWUSER}":www-data "${NODE_ROOT}" && sudo chmod -R 777 "${NODE_ROOT}" || exit
+    sudo chown -R "${WWWUSER}":"${WWWGROUP}" "${NODE_ROOT}" && sudo chmod -R 777 "${NODE_ROOT}" || exit
     echo -e "${GREEN} permission set for node_modules directory ${NC}\r\n"
 
   elif [ "$1" == "help" ] || [ "$1" == "-h" ]; then
