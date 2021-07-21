@@ -39,6 +39,8 @@ INDRA=/usr/bin/indra
 ARTISAN=/usr/bin/artisan
 VENDOR_ROOT="${CURRENT_DIR}"/vendor/
 NODE_ROOT="${CURRENT_DIR}"/node_modules/
+BOOTSTRAP="${CURRENT_DIR}"/bootstrap/
+STORAGE="${CURRENT_DIR}"/storage/
 #if [[ ! -f ${INDRA} ]]; then
 #  echo -e "${RED} add indra to /usr/bin directory now you can use it with out ./ in your ${CURRENT_DIR} ${NC}"
 #  sudo ln -s "${CURRENT_DIR}/indra" /usr/bin/indra
@@ -144,6 +146,14 @@ if [ $# -gt 0 ]; then
 
     echo -e "${CYAN} start to set node_modules directory permission${NC}"
     sudo chown -R "${WWWUSER}":"${WWWGROUP}" "${NODE_ROOT}" && sudo chmod -R 777 "${NODE_ROOT}" || exit
+    echo -e "${GREEN} permission set for node_modules directory ${NC}\r\n"
+
+    echo -e "${BLUE} start to set bootstrap directory permission${NC}"
+    sudo chmod 777 -R "${BOOTSTRAP}" || exit
+    echo -e "${BLUE} permission set for bootstrap directory ${NC}\r\n"
+
+    echo -e "${CYAN} start to set storage directory permission${NC}"
+    sudo chmod 777-R "${STORAGE}" || exit
     echo -e "${GREEN} permission set for node_modules directory ${NC}\r\n"
 
   elif [ "$1" == "help" ] || [ "$1" == "-h" ]; then
