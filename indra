@@ -24,21 +24,21 @@ if [ "$MACHINE" == "UNKNOWN" ]; then
   exit 1
 fi
 # Define environment variables...
-export APP_PORT=${APP_PORT:-80}
-export APP_SERVICE=${APP_SERVICE:-"web"}
-export COMPOSER_SERVICE=${APP_SERVICE:-"composer"}
-export DB_PORT=${DB_PORT:-3306}
-export WWWUSER=${WWWUSER:-$(id -u)}
-export WWWGROUP=${WWWGROUP:-$(id -g)}
+export APP_PORT="${APP_PORT:-80}"
+export APP_SERVICE="${APP_SERVICE:-"web"}"
+export COMPOSER_SERVICE="${APP_SERVICE:-"composer"}"
+export DB_PORT="${DB_PORT:-3306}"
+export WWWUSER="${WWWUSER:-$(id -u)}"
+export WWWGROUP="${WWWGROUP:-$(id -g)}"
 
-export INDRA_SHARE_DASHBOARD=${INDRA_SHARE_DASHBOARD:-4040}
-export INDRA_SHARE_SERVER_HOST=${INDRA_SHARE_SERVER_HOST:-"laravel-indra.site"}
-export INDRA_SHARE_SERVER_PORT=${INDRA_SHARE_SERVER_PORT:-8080}
+export INDRA_SHARE_DASHBOARD="${INDRA_SHARE_DASHBOARD:-4040}"
+export INDRA_SHARE_SERVER_HOST="${INDRA_SHARE_SERVER_HOST:-"laravel-indra.site"}"
+export INDRA_SHARE_SERVER_PORT="${INDRA_SHARE_SERVER_PORT:-8080}"
 CURRENT_DIR=$(pwd)
 INDRA=/usr/bin/indra
 ARTISAN=/usr/bin/artisan
-VENDOR_ROOT=${CURRENT_DIR}/vendor/
-NODE_ROOT=${CURRENT_DIR}/node_modules/
+VENDOR_ROOT="${CURRENT_DIR}"/vendor/
+NODE_ROOT="${CURRENT_DIR}"/node_modules/
 #if [[ ! -f ${INDRA} ]]; then
 #  echo -e "${RED} add indra to /usr/bin directory now you can use it with out ./ in your ${CURRENT_DIR} ${NC}"
 #  sudo ln -s "${CURRENT_DIR}/indra" /usr/bin/indra
@@ -53,24 +53,24 @@ if [ "$MACHINE" == "linux" ]; then
   NGINXRUNNING=$(systemctl is-active nginx)
   APACHERUNNING=$(systemctl is-active apache2)
   MYSQLRUNNING=$(systemctl is-active mysql)
-  if [ $APACHERUNNING = "active" ]; then
+  if [ "$APACHERUNNING" = "active" ]; then
     echo "Apache is running, stopping it"
     sudo service apache2 stop
     echo -e "${YELLOW}Stopping Apache2${NC}"
   fi
-  if [ $NGINXRUNNING = "active" ]; then
+  if [ "$NGINXRUNNING" = "active" ]; then
     echo "nginx is running, stopping it"
     sudo service nginx stop
     echo -e "${YELLOW}Stopping Nginx${NC}"
   fi
-  if [ $MYSQLRUNNING = "active" ]; then
+  if [ "$MYSQLRUNNING" = "active" ]; then
     echo "MySql is running, stopping it"
     sudo service mysql stop
     echo -e "${YELLOW}Stopping MySql${NC}"
   fi
 fi
-
 # Ensure that Docker is running...
+docker info >/dev/null 2>&1;
 if ! docker info >/dev/null 2>&1; then
   echo -e "${WHITE}Docker is not running.${NC}" >&2
 
@@ -78,9 +78,9 @@ if ! docker info >/dev/null 2>&1; then
 fi
 COMPOSE="docker-compose"
 # Determine if Indra is currently up...
-PSRESULT="$(docker-compose ps -q)"
 
-if docker-compose ps | grep $APP_SERVICE | grep 'Exit'; then
+PSRESULT="$(docker-compose ps -q)"
+if docker-compose ps | grep "$APP_SERVICE" | grep 'Exit'; then
   echo -e "${WHITE}Shutting down old Indra processes...${NC}" >&2
 
   docker-compose down >/dev/null 2>&1
@@ -108,7 +108,6 @@ if [ $# -gt 0 ]; then
   fi
   if [ "$1" == "initialize" ] || [ "$1" == "-init" ]; then
     shift 1
-    echo ${INDRA} ${ARTISAN}
     echo -e "${RED} start delete old indra,artisan files from /usr/bin directory ${NC}\r\n"
     sudo rm -rf ${INDRA} && sudo rm -rf ${ARTISAN} || exit
 

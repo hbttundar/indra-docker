@@ -81,7 +81,7 @@ services:
     volumes:
       - "./:/var/www/html/"
     command: [ "install", "--ignore-platform-reqs" ]
-    user: ${WWWUSER}
+    user: "${WWWUSER}"
     networks:
       - indra
     container_name: ${COMPOSER_CONTAINER_NAME}
