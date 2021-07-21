@@ -75,17 +75,17 @@ if [ "$MACHINE" == "mac" ]; then
 	MYSQLRUNNING=$(brew services list | grep mysql| cut -d\   -f2)
 	if [ $NGINXRUNNING=="started" ]; then 
 		echo "nginx is running, stopping it"
-		sudo  brew services stop nginx
+		brew services stop nginx
 		echo -e "${YELLOW}Stopping Nginx${NC}"
 	fi
 	if [ $APACHERUNNING=="started" ]; then 
 		echo "Apache is running, stopping it"
-		sudo  brew services stop httpd
+		brew services stop httpd
 		echo "${YELLOW}Stopping Apache2${NC}"
 	fi
 	if [ $MYSQLRUNNING=="started" ]; then 
 		echo "MySql is running, stopping it"
-		sudo  brew services stop mysql
+		brew services stop mysql
 		echo -e "${YELLOW}Stopping MySql${NC}"
 	fi
 fi
