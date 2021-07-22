@@ -158,6 +158,12 @@ if [ $# -gt 0 ]; then
 
   elif [ "$1" == "help" ] || [ "$1" == "-h" ]; then
     shift 1
+
+    echo -e "${GREEN} You can use this command to stop other project docker and make indra ready to go:\r\n"
+    echo -e "${RED} docker-restart | -dr:"
+    echo -e "${CYAN} other project that run with docker and bind required port for indra should stop\r\n"
+    echo -e "${PURPLE} sample : indra docker-restart | indra -dr \r\n"
+
     echo -e "${GREEN} You have these commands for running:\r\n"
     echo -e "${RED} up:"
     echo -e "${CYAN} indra up use for running docker-compose up command\r\n"
@@ -250,6 +256,30 @@ if [ $# -gt 0 ]; then
     echo -e "${RED} :"
     echo -e "${CYAN} Pass unknown commands to the 'docker-compose' binary  \r\n"
     echo -e "${PURPLE}sample : indra  events \r\n"
+
+  # stop old docker services
+  elif [ "$1" == "docker-restart" ] || [ "$1" == "-dr" ]; then
+    shift 1
+    echo -e "${YELLOW}Stopping Dockers...${NC}"
+    docker stop $(docker ps -a -q)
+    echo -e "Docker ${GREEN}Stopped${NC}"
+    echo -e "${YELLOW}Stopping Docker-compose...${NC}"
+    docker-compose stop
+    echo -e "Docker-compose ${GREEN}Stopped${NC}"
+    echo -e "${YELLOW}Old docker running project stoped ,now you can start indra...${NC}"
+  # Run Indra using docker compose up...
+  elif [ grep -q "up" "$1" ]; then
+    shift 1
+    echo -e "${YELLOW}Stopping Dockers...${NC}"
+    docker stop $(docker ps -a -q)
+    echo -e "Docker ${GREEN}Stopped${NC}"
+    echo -e "${YELLOW}Stopping Docker-compose...${NC}"
+    docker-compose stop
+    echo -e "Docker-compose ${GREEN}Stopped${NC}"
+    echo -e "${YELLOW}Old docker running project stoped ,now you can start indra...${NC}"
+    echo -e "${YELLOW}Starting Docker-compose...${NC}"
+    docker-compose "$@"
+    echo -e "Docker-compose ${GREEN}Started${NC}"
   # Proxy PHP commands to the "php" binary on the application container...
   elif [ "$1" == "php" ]; then
     shift 1

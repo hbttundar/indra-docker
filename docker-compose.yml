@@ -51,6 +51,7 @@ services:
       - proxy:playground.localhost
     networks:
       - indra
+    platform: linux/x86_64  
     container_name: ${PLAYGROUND_CONTAINER_NAME}
   ### proxy ############################################################################################################
   proxy:
@@ -60,6 +61,7 @@ services:
       - '443:443'
     networks:
       - indra
+    platform: linux/x86_64  
     container_name: ${PROXY_CONTAINER_NAME}
   ### hostmachine ######################################################################################################
   hostmachine:
@@ -72,6 +74,7 @@ services:
     restart: on-failure
     networks:
       - indra
+    platform: linux/x86_64
     container_name: ${HOSTMACHINE_CONTAINER_NAME}
   ### composer #########################################################################################################
   composer:
@@ -84,6 +87,7 @@ services:
     user: "${WWWUSER}"
     networks:
       - indra
+    platform: linux/x86_64
     container_name: ${COMPOSER_CONTAINER_NAME}
   ## mysql service ##########################################################################################################################
   mysql:
@@ -119,9 +123,11 @@ services:
       timeout: 5s
     networks:
       - indra
+    platform: linux/x86_64
     container_name: ${REDIS_CONTAINER_NAME}
   ## meilisearch service ####################################################################################################################
   meilisearch:
+    platform: linux/x86_64
     image: "getmeili/meilisearch:latest"
     ports:
       - "${FORWARD_MEILISEARCH_PORT:-7700}:7700"
@@ -143,6 +149,7 @@ services:
     container_name: ${SEARCH_ENGINE_CONTAINER_NAME}
   ## mailhog service ########################################################################################################################
   mailhog:
+    platform: linux/x86_64
     image: "mailhog/mailhog:latest"
     ports:
       - "${FORWARD_MAILHOG_PORT:-1025}:1025"
@@ -152,6 +159,7 @@ services:
     container_name: ${MAIL_SERVICE_CONTAINER_NAME}
   ## selenium service ########################################################################################################################
   selenium:
+    platform: linux/x86_64
     image: "selenium/standalone-chrome"
     volumes:
       - "/dev/shm:/dev/shm"
@@ -190,6 +198,7 @@ services:
   ### graylog ############################################################################################################
   graylog:
     image: graylog/graylog:4.0
+    platform: linux/x86_64  
     volumes:
       - indragraylog:/usr/share/graylog/data/journal
       - ./docker/graylog/config/:/usr/share/graylog/data/config/
