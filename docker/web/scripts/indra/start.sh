@@ -1,24 +1,17 @@
-#!/bin/bash
-set -e
-echo '-----------------------------------------------------------------------------------'
-echo '--------------------- config usermod for apache -----------------------------------'
-echo '-----------------------------------------------------------------------------------'
-# shellcheck disable=SC1035
+#!/usr/bin/env bash
+
 if [ ! -z "$WWWUSER" ]; then
-  usermod -u $WWWUSER indra
+  usermod -u $WWWUSER sail
 fi
-if [ $# -gt 0 ]; then
-  exec gosu $WWWUSER "$@"
-fi
+
 if [ ! -d /.composer ]; then
   mkdir /.composer
 fi
-echo '-----------------------------------------------------------------------------------'
-echo '--------------------- set composer permissions -----------------------------------'
-echo '-----------------------------------------------------------------------------------'
+
 chmod -R ugo+rw /.composer
-echo 'composer folder permissions set successfully'
-echo '-----------------------------------------------------------------------------------'
-echo '------------------------- start apache server -------------------------------------'
-echo '-----------------------------------------------------------------------------------'
-/usr/sbin/apache2 -D FOREGROUND
+
+if [ $# -gt 0 ]; then
+  exec gosu $WWWUSER "$@"
+else
+  /usr/bin/supervisord -c /etc/supervisor/conf.d/supervisord.conf
+fi

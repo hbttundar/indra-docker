@@ -1,28 +1,27 @@
-FROM httpd:latest
+FROM ubuntu:21.04
 
-# Base config for HTTP & HTTPS
-COPY httpd.conf /usr/local/apache2/conf
-COPY httpd-ssl.conf /usr/local/apache2/conf
+LABEL maintainer="Hosein Bagherzadegan Talkhouncheh"
 
-COPY conf/playground_https.conf /usr/local/apache2/conf
+ARG DEFAULT_WEB_SERVER
 
-# indra (Phoneservice Websites)
-COPY conf/indra_http.conf /usr/local/apache2/conf
-COPY conf/indra_https.conf /usr/local/apache2/conf
 
-# Mailhog (Mail-catcher service)
-COPY conf/mailhog_http.conf /usr/local/apache2/conf
-COPY conf/mailhog_https.conf /usr/local/apache2/conf
+COPY apache/supervisord.conf  /tmp/config/supervisord_apache2.conf
+COPY nginx/supervisord.conf  /tmp/config/supervisord_nginx.conf
+COPY scripts/build.sh /tmp/build.sh
+COPY scripts/start.sh /usr/local/bin/start.sh
+RUN chmod +x /tmp/build.sh  &&  chmod +x /usr/local/bin/start.sh
+RUN bash /tmp/build.sh
+#
+# copy all files that we need
+#
+COPY apache /etc/apache2/
+COPY nginx /etc/nginx 
+COPY self-certificate/server.crt /etc/ssl/certs/server.crt 
+COPY self-certificate/server.key /etc/ssl/private/server.key 
 
-# Playground (PHP empty project for quick tests and experiments)
-COPY conf/playground_http.conf /usr/local/apache2/conf
-COPY conf/playground_https.conf /usr/local/apache2/conf
+RUN update-ca-certificates
 
-# Domain lists (will be included in both HTTP & HTTPS configurations)
-COPY conf/domains/indra_domains.conf /usr/local/apache2/conf
-COPY conf/domains/mailhog_domains.conf /usr/local/apache2/conf
-COPY conf/domains/playground_domains.conf /usr/local/apache2/conf
 
-# Self-signed certificates
-COPY selfSignedCertificates/server.key /usr/local/apache2/conf
-COPY selfSignedCertificates/server.crt /usr/local/apache2/conf
+EXPOSE 80 443
+
+ENTRYPOINT ["start.sh"]

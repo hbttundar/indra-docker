@@ -268,7 +268,7 @@ if [ $# -gt 0 ]; then
     echo -e "Docker-compose ${GREEN}Stopped${NC}"
     echo -e "${YELLOW}Old docker running project stoped ,now you can start indra...${NC}"
   # Run Indra using docker compose up...
-  elif [ grep -q "up" "$1" ]; then
+  elif  grep -s -q "up" "$1" ; then
     shift 1
     echo -e "${YELLOW}Stopping Dockers...${NC}"
     docker stop $(docker ps -a -q)
