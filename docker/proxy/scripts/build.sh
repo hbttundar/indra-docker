@@ -2,7 +2,6 @@
 export DEBIAN_FRONTEND=noninteractive
 #set the timezone for tzdata in ubuntu otherwise during installation ask for select timezone
 export TZ=UTC
-
 ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ >/etc/timezone
 apt-get update &&
   apt-get install -y \
@@ -53,5 +52,4 @@ if [ "$DEFAULT_WEB_SERVER" = "nginx" ]; then
   cp /tmp/config/supervisord_nginx.conf /etc/supervisor/conf.d/supervisord.conf
   echo -e "${YELLOW}nginx install sucessfully"
 fi
-
 apt-get -y autoremove && apt-get clean && rm -rf /var/lib/apt/lists/*

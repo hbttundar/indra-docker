@@ -36,9 +36,7 @@ apt-get update &&
   apt-get update &&
   apt-get install -y \
     ca-certificates \
-    apache2 \
     php8.0 \
-    libapache2-mod-php8.0 \
     php8.0-cli \
     php8.0-fpm \
     php8.0-dev \
@@ -67,6 +65,7 @@ apt-get update &&
     php8.0-ldap \
     php8.0-redis \
     php8.0-swoole \
+    libapache2-mod-php8.0 \
     ssl-cert \
     openssl &&
   php -r "readfile('http://getcomposer.org/installer');" | php -- --install-dir=/usr/bin/ --filename=composer &&
@@ -89,17 +88,30 @@ else
   cp /tmp/msmtprc /etc/msmtprc
 fi
 echo '-----------------------------------------------------------------------------------'
-echo '----------------------- config apache modules -------------------------------------'
+echo '--------------------------- config web server -------------------------------------'
 echo '-----------------------------------------------------------------------------------'
-a2enmod rewrite
-a2enmod headers
-a2enmod expires
-a2enmod ssl
-a2enmod proxy
-a2enmod proxy_http
-a2enmod proxy_fcgi setenvif
-a2enmod php8.0
+if [ "$DEFAULT_WEB_SERVER" = "apache2" ]; then
+  echo -e "${YELLOW}install apache2 server and config it"
+  apt-get install -yq apache2
+  a2enmod rewrite
+  a2enmod headers
+  a2enmod expires
+  a2enmod ssl
+  a2enmod proxy
+  a2enmod proxy_http
+  a2enmod proxy_fcgi setenvif
+  a2enmod php${PHP_VERSION}
+  cp /tmp/config/supervisord_apache2.conf /etc/supervisor/conf.d/supervisord.conf
+  echo -e "${YELLOW}apache2 install sucessfully"
+fi
+if [ "$DEFAULT_WEB_SERVER" = "nginx" ]; then
+  echo -e "${YELLOW}install nginx server and config it"
+  apt-get install  -yq net-tools nginx
+  cp /tmp/config/supervisord_nginx.conf /etc/supervisor/conf.d/supervisord.conf
+  echo -e "${YELLOW}nginx install sucessfully"
+fi
 echo '-----------------------------------------------------------------------------------'
 echo '-------------------------- clean ubuntu container ---------------------------------'
 echo '-----------------------------------------------------------------------------------'
+rm -rf /tmp/config
 apt-get -y autoremove && apt-get clean && rm -rf /var/lib/apt/lists/*

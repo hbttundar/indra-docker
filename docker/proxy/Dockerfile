@@ -23,5 +23,5 @@ RUN update-ca-certificates
 
 
 EXPOSE 80 443
-
+#CMD tail -f /dev/null
 ENTRYPOINT ["start.sh"]
