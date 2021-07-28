@@ -1,7 +1,7 @@
 # For more information: https://laravel.com/docs/indra
 version: "3"
 services:
-  ## web service ############################################################################################################################
+  ## web service #######################################################################################################
   web:
     build:
       context: ./docker/web
@@ -25,9 +25,8 @@ services:
       - meilisearch
       - selenium
     links:
-      - proxy:www.stage.indra.de
-      - proxy:www.live.indra.de
-      - proxy:www.indra.de
+      - proxy:www.indra.de.localhost
+      - proxy:www.indra.localhost
     container_name: ${WEB_CONTAINER_NAME}
   ### proxy ############################################################################################################
   proxy:
@@ -66,6 +65,7 @@ services:
       - indra
     container_name: ${COMPOSER_CONTAINER_NAME}
     ## mariadb service #####################################################################################################################
+  ### database #########################################################################################################
   db:
    image: "${DB_IMAGE}:${DB_VERSION}"
    restart: 'always'
@@ -86,7 +86,7 @@ services:
    networks:
       - indra
    container_name: ${DB_CONTAINER_NAME}
-  ## redis service ##########################################################################################################################
+  ## redis service #####################################################################################################
   redis:
     image: "redis:alpine"
     ports:
@@ -100,7 +100,7 @@ services:
     networks:
       - indra
     container_name: ${REDIS_CONTAINER_NAME}
-  ## meilisearch service ####################################################################################################################
+  ## meilisearch service ###############################################################################################
   meilisearch:
     build:
       context: ./docker/meilisearch
@@ -111,7 +111,7 @@ services:
     networks:
       - indra
     container_name: ${SEARCH_ENGINE_CONTAINER_NAME}
-  ## mailhog service ########################################################################################################################
+  ## mailhog service ###################################################################################################
   mailhog:
     image: "mailhog/mailhog:latest"
     ports:
@@ -120,7 +120,7 @@ services:
     networks:
       - indra
     container_name: ${MAIL_SERVICE_CONTAINER_NAME}
-  ## selenium service ########################################################################################################################
+  ## selenium service ##################################################################################################
   selenium:
     image: "selenium/standalone-chrome"
     volumes:
@@ -134,7 +134,7 @@ services:
     networks:
       - indra
     container_name: ${MONOGO_CONTAINER_NAME}
-  ###ElasticSearch #####################################################################################################
+  ### elasticSearch ####################################################################################################
   elasticsearch:
     image: docker.elastic.co/elasticsearch/elasticsearch-oss:7.10.2
     environment:
@@ -153,7 +153,7 @@ services:
     networks:
       - indra
     container_name: ${ELASTICSEARCH_CONTAINER_NAME}
-  ### graylog ############################################################################################################
+  ### graylog ##########################################################################################################
   graylog:
     image: graylog/graylog:4.1
     volumes:
@@ -189,7 +189,7 @@ services:
     entrypoint: /usr/bin/tini -- wait-for-it elasticsearch:9200 --  /docker-entrypoint.sh
     restart: always
     container_name: ${GRAYLOG_CONTAINER_NAME}
-  ### portainer ############################################################################################################
+  ### portainer ########################################################################################################
   portainer:
     image: portainer/portainer
     volumes:
