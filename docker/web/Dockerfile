@@ -19,8 +19,8 @@ RUN usermod -a -G root indra && usermod -a -G www-data indra
 # copy all files that we need
 #
 COPY ./msmtp/  /tmp/
-COPY self-certificate/server.crt /etc/ssl/certs/server.crt 
-COPY self-certificate/server.key /etc/ssl/private/server.key 
+COPY self-certificate/server.crt /etc/ssl/certs/server.crt
+COPY self-certificate/server.key /etc/ssl/private/server.key
 COPY ${PHP_VERSION}/php/php.ini /etc/php/8.0/cli/conf.d/99-indra.ini
 COPY ${PHP_VERSION}/apache/supervisord.conf /tmp/config/supervisord_apache2.conf
 COPY ${PHP_VERSION}/nginx/supervisord.conf /tmp/config/supervisord_nginx.conf

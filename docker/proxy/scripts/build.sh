@@ -27,7 +27,10 @@ apt-get update &&
     libmcrypt-dev \
     apt-utils \
     ssl-cert \
-    openssl
+    openssl &&
+  mkdir -p ~/.gnupg &&
+  chmod 600 ~/.gnupg &&
+  echo "disable-ipv6" >>~/.gnupg/dirmngr.conf
 echo '-----------------------------------------------------------------------------------'
 echo '--------------------------- config web server -------------------------------------'
 echo '-----------------------------------------------------------------------------------'
@@ -40,6 +43,12 @@ if [ "$DEFAULT_WEB_SERVER" = "apache2" ]; then
   a2enmod ssl && \
   a2enmod proxy && \
   a2enmod proxy_http && \
+  a2enmod proxy_connect && \
+  a2enmod proxy_fcgi setenvif &&\
+  a2enmod http2 && \
+  a2enmod remoteip && \
+  a2enmod php${PHP_VERSION} && \
+  a2enconf ssl-params
   cp /tmp/config/supervisord_apache2.conf /etc/supervisor/conf.d/supervisord.conf
   echo -e "${YELLOW}apache2 install sucessfully"
   source /etc/apache2/envvars
